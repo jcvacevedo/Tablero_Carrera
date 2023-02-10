@@ -1,5 +1,5 @@
 ---
-title: "Datos Carrera La Luz 2022"
+title: "Datos Carrera La Luz 2022 (Cali, Colombia)"
 output: 
   flexdashboard::flex_dashboard:
     theme:
