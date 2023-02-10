@@ -1,0 +1,243 @@
+---
+title: "Datos Carrera La Luz 2022 (Cali, Colombia)"
+output: 
+  flexdashboard::flex_dashboard:
+    theme:
+      bg: "#FFFFFF"
+      fg: "#0a0a0a" 
+      primary: "#115759"
+      base_font:
+        google: Prompt
+      code_font:
+        google: JetBrains Mono
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(paqueteMET)
+library(ggplot2)
+library(plotrix)
+library(psych)
+library(lessR)
+library(dplyr)
+library(ggrepel)
+library(modeest)
+library(reticulate)
+library(gridExtra)
+library(scales)
+library(plotKML)
+library(ggplot2)
+library(leaflet)
+library(rgdal)
+data("CarreraLuz22")
+# Install thematic and un-comment for themed static plots (i.e., ggplot2)
+# thematic::thematic_rmd()
+```
+
+## Column {.tabset data-width="600"}
+
+### Recorrido de la Carrera
+
+```{r}
+
+GPX_file <- '10k de la luz.gpx'
+track <- readOGR(GPX_file, layer = "tracks", verbose = FALSE)
+leaflet() %>% addTiles() %>% addPolylines(data=track) %>%
+addProviderTiles("Thunderforest.Landscape", group = "Topographical") %>%
+addProviderTiles("OpenStreetMap.Mapnik", group = "Road map") %>%
+addProviderTiles("Esri.WorldImagery", group = "Satellite") %>%
+addLayersControl(position = 'topright',
+    baseGroups = c("Topographical", "Road map", "Satellite"),
+    options = layersControlOptions(collapsed = FALSE))
+
+```
+
+### Distribución de la Edad y Tiempo
+
+```{r}
+edad=CarreraLuz22$edad
+sexo=CarreraLuz22$sex
+tiempo=CarreraLuz22$timerun/60
+p1 <- ggplot(CarreraLuz22, aes(y=edad , x=tiempo, color=sexo, fill=sexo))+
+geom_point()+ facet_wrap(~ sex)
+
+p2 <- psych::describe(CarreraLuz22$timerun/60)
+
+grid.arrange(p1)
+```
+
+```{r}
+print(p2)
+```
+
+### Distribución del Tiempo
+
+```{r}
+
+tiempo=CarreraLuz22$timerun/60
+categoria=CarreraLuz22$categoria
+ggplot(CarreraLuz22,aes(x=categoria, y=tiempo, fill=categoria)) +
+  geom_boxplot(alpha=0.3)+ theme(legend.position="none") + 
+    scale_y_continuous(limits=c(20,120), breaks=seq(0,120,20), expand = c(0, 0))
+```
+
+```{r}
+t1 = aggregate(CarreraLuz22$timerun/60, list(CarreraLuz22$categoria), FUN=median) 
+colnames(t1)=c("Categoria", "Mediana")
+t1
+```
+
+### Conteo de Atletas por Categoría
+
+```{r}
+conteo=table(CarreraLuz22$sex,CarreraLuz22$categoria)
+sexo=CarreraLuz22$sex
+categoria=CarreraLuz22$categoria
+ggplot(CarreraLuz22, aes(categoria)) +
+geom_bar(aes(fill=sexo)) +
+geom_text(aes(label=..count..), stat='count', position=position_dodge(0.9), 
+            vjust=-0.5, size=2.5)
+```
+
+```{r}
+c("Moda:",mlv(CarreraLuz22$categoria, method = "meanshift"))
+c("Min:",min(CarreraLuz22$categoria))
+c("Max:",max(CarreraLuz22$categoria))
+```
+
+### Distribución por Categoría
+
+```{r}
+
+dataM=subset(CarreraLuz22, (CarreraLuz22$sex=="Mujer"))
+dataH=subset(CarreraLuz22, (CarreraLuz22$sex=="Hombre"))
+
+dM <- dataM %>% 
+  group_by(categoria) %>% # Variable a ser transformada
+  count() %>% 
+  ungroup() %>% 
+  mutate(porcentaje = `n` / sum(`n`)) %>% 
+  arrange(porcentaje) %>%
+  mutate(etiquetas = scales::percent(porcentaje))
+
+p1 <- ggplot(dM, aes(x = "", y = porcentaje, fill = categoria)) +
+      geom_col(alpha=0.6) +
+      geom_label(aes(label = etiquetas),
+                 position = position_stack(vjust = 0.5),
+                 show.legend = FALSE) +
+      coord_polar(theta = "y") + 
+      ggtitle("Mujeres")
+
+dH <- dataH %>% 
+  group_by(categoria) %>% # Variable a ser transformada
+  count() %>% 
+  ungroup() %>% 
+  mutate(porcentaje = `n` / sum(`n`)) %>% 
+  arrange(porcentaje) %>%
+  mutate(etiquetas = scales::percent(porcentaje))
+
+p2 <- ggplot(dH, aes(x = "", y = porcentaje, fill = categoria)) +
+      geom_col(alpha=0.6) +
+      geom_label(aes(label = etiquetas), position = position_fill(vjust = 0.5),
+                 show.legend = FALSE) + 
+      coord_polar(theta = "y") +  
+      ggtitle("Hombres")
+
+p1
+p2
+
+```
+
+### Conteo de Atletas por Edad
+
+```{r}
+ggplot(CarreraLuz22, aes(edad, fill = sex)) +
+  geom_histogram(alpha=0.6)
+
+```
+
+```{r}
+psych::describe(CarreraLuz22$edad)
+```
+
+## Column {data-width="340"}
+
+### Distribución de Edades por Sexo
+
+```{r}
+edad=CarreraLuz22$edad
+sexo=CarreraLuz22$sex
+ggplot(CarreraLuz22,aes(x=edad, color=sexo, fill=sexo)) +
+  geom_density(alpha=0.4)
+```
+
+### Resumen
+
+```{python}
+print("Indicadores Edad Mujeres")
+```
+
+```{r}
+dataFc4=subset(CarreraLuz22, (CarreraLuz22$sex=="Mujer")) # dataset de mujeres
+M=dataFc4$edad
+summary.default(M)
+```
+
+```{python}
+print("Indicadores Edad Hombres")
+```
+
+```{r}
+dataFc5=subset(CarreraLuz22, (CarreraLuz22$sex=="Hombre")) # dataset de hombres
+H=dataFc5$edad
+summary.default(H)
+```
+
+## Column {data-width="150"}
+
+### Tiempo ganador mujer
+
+```{r}
+dataFc1=subset(CarreraLuz22, (CarreraLuz22$sex=="Mujer"))
+time = min(dataFc1$timerun)/60
+Withtext <- dollar_format(prefix = "",suffix=" min")
+valueBox(Withtext(time), icon = "fa-female",col="#AEE465")
+```
+
+### Tiempo ganador hombre
+
+```{r}
+dataFc1=subset(CarreraLuz22, (CarreraLuz22$sex=="Hombre"))
+time = min(dataFc1$timerun)/60
+Withtext <- dollar_format(prefix = "",suffix=" min")
+valueBox(Withtext(time), icon = "fa-male",col="#AEE465")
+```
+
+### Mejor ritmo de carrera
+
+```{r}
+time = min(CarreraLuz22$timerun)/60
+ritmo = (time/10)
+Withtext <- dollar_format(prefix = "",suffix=" min/km")
+valueBox(Withtext(ritmo), icon = "fa-tennis",col="#AEE465")
+```
+
+### Velocidad máxima
+
+```{r}
+time = min(CarreraLuz22$timerun)/3600
+vel = (10/time)
+Withtext <- dollar_format(prefix = "",suffix=" km/h")
+valueBox(Withtext(vel), icon = "fa-speed",col="#AEE465")
+```
+
+### Porcentaje de hombres
+
+```{r}
+dataFc1=subset(CarreraLuz22, (CarreraLuz22$sex=="Hombre"))
+total= nrow(CarreraLuz22)
+H= nrow(dataFc1)
+valor=(H/total)
+Withtext <- dollar_format(prefix = "",suffix=" km/h")
+valueBox(scales::percent(valor), icon = "fa-pie",col="#AEE465")
+```
