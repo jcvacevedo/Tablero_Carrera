@@ -47,7 +47,8 @@ addProviderTiles("Thunderforest.Landscape", group = "Topographical") %>%
 addProviderTiles("Esri.WorldImagery", group = "Satellite") %>%
 addLayersControl(position = 'topright', 
                  baseGroups = c("Topographical", "Satellite"),
-    options = layersControlOptions(collapsed = FALSE))
+    options = layersControlOptions(collapsed = FALSE)) %>%
+addMarkers(lng=-76.539181, lat=3.450077, popup="Hotel Intercontinental (Salida y Llegada)")
 ```
 
 ### Distribución de la Edad y Tiempo
