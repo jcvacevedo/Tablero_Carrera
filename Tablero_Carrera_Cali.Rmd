@@ -1,5 +1,5 @@
 ---
-title: "Datos Carrera La Luz 2022 (Cali, Colombia)"
+title: "Datos Carrera La Luz 10K 2022 (Cali, Colombia)"
 output: 
   flexdashboard::flex_dashboard:
     theme:
@@ -232,6 +232,17 @@ Withtext <- dollar_format(prefix = "",suffix=" km/h")
 valueBox(Withtext(vel), icon = "fa-speed",col="#AEE465")
 ```
 
+### Porcentaje de mujeres
+
+```{r}
+dataFc1=subset(CarreraLuz22, (CarreraLuz22$sex=="Mujer"))
+total= nrow(CarreraLuz22)
+H= nrow(dataFc1)
+valor=(H/total)
+Withtext <- dollar_format(prefix = "",suffix=" km/h")
+valueBox(scales::percent(valor), icon = "fa-female",col="#AEE465")
+```
+
 ### Porcentaje de hombres
 
 ```{r}
@@ -240,5 +251,5 @@ total= nrow(CarreraLuz22)
 H= nrow(dataFc1)
 valor=(H/total)
 Withtext <- dollar_format(prefix = "",suffix=" km/h")
-valueBox(scales::percent(valor), icon = "fa-pie",col="#AEE465")
+valueBox(scales::percent(valor), icon = "fa-male",col="#AEE465")
 ```
