@@ -32,7 +32,7 @@ data("CarreraLuz22")
 
 Column {data-width=600 .tabset}
 -----------------------------------------------------------------------
-### Distribucion de la Edad y Tiempo
+### Distribución de la Edad y Tiempo
 
 ```{r}
 edad=CarreraLuz22$edad
@@ -50,7 +50,7 @@ print(p2)
 ```
 
 
-### Distribucion del Tiempo
+### Distribución del Tiempo
 
 ```{r}
 
@@ -68,7 +68,7 @@ t1
 
 
 
-### Conteo de Atletas por Categoria
+### Conteo de Atletas por Categoría
 
 ```{r}
 conteo=table(CarreraLuz22$sex,CarreraLuz22$categoria)
@@ -85,7 +85,7 @@ c("Min:",min(CarreraLuz22$categoria))
 c("Max:",max(CarreraLuz22$categoria))
 ```
 
-### Distribucion por Categoria
+### Distribución por Categoría
 
 ```{r}
 
