@@ -1,5 +1,5 @@
 ---
-title: "Datos Carrera La Luz 2022 (Cali, Colombia)"
+title: "Datos Carrera La Luz 2022"
 output: 
   flexdashboard::flex_dashboard:
     theme:
@@ -34,22 +34,20 @@ data("CarreraLuz22")
 # thematic::thematic_rmd()
 ```
 
-## Column {.tabset data-width="600"}
+Column {data-width=600 .tabset}
+-----------------------------------------------------------------------
 
-### Recorrido de la Carrera
+### Recorrido de Carrera
 
 ```{r}
-
 GPX_file <- '10k de la luz.gpx'
 track <- readOGR(GPX_file, layer = "tracks", verbose = FALSE)
 leaflet() %>% addTiles() %>% addPolylines(data=track) %>%
 addProviderTiles("Thunderforest.Landscape", group = "Topographical") %>%
-addProviderTiles("OpenStreetMap.Mapnik", group = "Road map") %>%
 addProviderTiles("Esri.WorldImagery", group = "Satellite") %>%
-addLayersControl(position = 'topright',
-    baseGroups = c("Topographical", "Road map", "Satellite"),
+addLayersControl(position = 'topright', 
+                 baseGroups = c("Topographical", "Satellite"),
     options = layersControlOptions(collapsed = FALSE))
-
 ```
 
 ### Distribución de la Edad y Tiempo
@@ -65,10 +63,10 @@ p2 <- psych::describe(CarreraLuz22$timerun/60)
 
 grid.arrange(p1)
 ```
-
 ```{r}
 print(p2)
 ```
+
 
 ### Distribución del Tiempo
 
@@ -80,12 +78,13 @@ ggplot(CarreraLuz22,aes(x=categoria, y=tiempo, fill=categoria)) +
   geom_boxplot(alpha=0.3)+ theme(legend.position="none") + 
     scale_y_continuous(limits=c(20,120), breaks=seq(0,120,20), expand = c(0, 0))
 ```
-
 ```{r}
 t1 = aggregate(CarreraLuz22$timerun/60, list(CarreraLuz22$categoria), FUN=median) 
 colnames(t1)=c("Categoria", "Mediana")
 t1
 ```
+
+
 
 ### Conteo de Atletas por Categoría
 
@@ -98,7 +97,6 @@ geom_bar(aes(fill=sexo)) +
 geom_text(aes(label=..count..), stat='count', position=position_dodge(0.9), 
             vjust=-0.5, size=2.5)
 ```
-
 ```{r}
 c("Moda:",mlv(CarreraLuz22$categoria, method = "meanshift"))
 c("Min:",min(CarreraLuz22$categoria))
@@ -155,14 +153,16 @@ ggplot(CarreraLuz22, aes(edad, fill = sex)) +
   geom_histogram(alpha=0.6)
 
 ```
-
 ```{r}
 psych::describe(CarreraLuz22$edad)
 ```
 
-## Column {data-width="340"}
+
+Column {data-width=340}
+-----------------------------------------------------------------------
 
 ### Distribución de Edades por Sexo
+
 
 ```{r}
 edad=CarreraLuz22$edad
@@ -193,7 +193,8 @@ H=dataFc5$edad
 summary.default(H)
 ```
 
-## Column {data-width="150"}
+Column {data-width=150}
+---------------------------------------------------------------------
 
 ### Tiempo ganador mujer
 
