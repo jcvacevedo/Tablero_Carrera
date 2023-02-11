@@ -158,6 +158,14 @@ ggplot(CarreraLuz22, aes(edad, fill = sex)) +
 psych::describe(CarreraLuz22$edad)
 ```
 
+### Mas Información
+
+```{python}
+print("Dashboard elaborado para la clase Métodos y Simulación Estadística")
+print("Profesor Daniel Enrique González Gómez")
+print("Presentado por Juan Carlos Villalba Acevedo")
+print("13 de febrero de 2023")
+```
 
 Column {data-width=340}
 -----------------------------------------------------------------------
