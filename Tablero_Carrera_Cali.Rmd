@@ -1,6 +1,5 @@
 ---
 title: "Datos Carrera La Luz 10K 2022 (Cali, Colombia)"
-author: "Juan Carlos Villalba Acevedo"
 output: 
   flexdashboard::flex_dashboard:
     theme:
