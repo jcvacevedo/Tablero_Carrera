@@ -1,5 +1,6 @@
 ---
 title: "Datos Carrera La Luz 10K 2022 (Cali, Colombia)"
+author: "Juan Carlos Villalba Acevedo"
 output: 
   flexdashboard::flex_dashboard:
     theme:
@@ -165,7 +166,11 @@ print("Dashboard elaborado para la clase Métodos y Simulación Estadística")
 print("Profesor Daniel Enrique González Gómez")
 print("Presentado por Juan Carlos Villalba Acevedo")
 print("13 de febrero de 2023")
+print("")
 ```
+
+![](carrera1.png)
+
 
 Column {data-width=340}
 -----------------------------------------------------------------------
