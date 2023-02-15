@@ -157,6 +157,27 @@ ggplot(CarreraLuz22, aes(edad, fill = sex)) +
 ```{r}
 psych::describe(CarreraLuz22$edad)
 ```
+```{r}
+dataM=subset(CarreraLuz22, (CarreraLuz22$sex=="Mujer"))
+dataH=subset(CarreraLuz22, (CarreraLuz22$sex=="Hombre"))
+m=dataM$edad
+h=dataH$edad
+
+c("CV Mujer (Edad):",sd(m)/mean(m)*100)
+c("CV Hombre (Edad):",sd(h)/mean(h)*100)
+```
+### Análisis de datos 1
+```{python}
+print("En la gráfica de distribución de edades por sexo podemos observar que la curva de edad \nde las mujeres es más alargada que las de los hombres, es decir, de las mujeres que \nparticiparon en la carrera la mayoría de ellas tenían una edad cercana a los 31 años. \nAdicionalmente, la curva de distribución de los hombres comparada con la de las \nmujeres es un poco más achatada y se extiende hacia la derecha, lo que nos permite \ninferir que la edad que tenían los hombres participantes se encontraban en su mayoría \nentre los 32 y 40 años.")
+print("La distribución del tiempo frente a la edad presenta una distribución muy parecida, \nsin embargo, los puntos correspondientes a la gráfica de los hombres se \nencuentran desplazados un poco más hacia la izquierda, lo que nos marca que los \nhombres realizaron tiempos menores en completar la carrera. Observando los indicadores \nde dispersión, la curtosis para la variable tiempo tiene un valor de 1.89, por lo tanto, \nse puede definir de tipo Leptocúrtica, lo que indica que los datos de la variable \ntiempo presentan una forma alargada y puntiaguda. ")
+print("Con la ayuda del diagrama de cajas se puede observar que la categoría juvenil tuvo una mayor \ndispersión de los datos de tiempo y al mismo tiempo presento una mediana menor \ncon respecto a las demás categorías. La categoría que menor dispersión en sus datos de \ntiempo tuvo fue veteranos B. ")
+```
+
+### Análisis de datos 2
+```{python}
+print("En el diagrama de barras con dos variables podemos decir que ratifica una mayor \nparticipación de los hombres en la carrera y que la categoría abierta fue la que tuvo \nmás participantes, mientras que la juvenil fue la categoría con menor participantes. \nLo anterior, lo podemos describir mucho mejor con la ayuda de los diagramas circulares \npara cada género, donde nos muestra que la categoría abierta presento un 67.5% de \nparticipación de hombre y un 57.5% de mujeres.")
+print("Finalmente, en la gráfica de histograma para la variable edad podemos observar que la \ndistribución es similar para los dos sexos a pesar de que el número de participantes \nhombres sea superior a las mujeres. El valor obtenido para el coeficiente de variación \nde la variable edad de cada sexo nos muestra que son muy similares, lo que nos \ncorrobora lo observado en la gráfica. Adicionalmente, podemos decir que como los \nvalores de los CV superan el 20%, los datos de la edad para los dos sexos son \nheterogéneos.")
+```
 
 ### Mas Información
 
@@ -169,7 +190,6 @@ print("")
 ```
 
 ![](carrera1.png)
-
 
 Column {data-width=340}
 -----------------------------------------------------------------------
